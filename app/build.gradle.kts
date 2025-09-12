@@ -55,13 +55,13 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    // ✅ Foundation (para LazyVerticalGrid, etc.)
+
     implementation("androidx.compose.foundation:foundation")
 
-    // ✅ Íconos extendidos (estrella, etc.)
+
     implementation("androidx.compose.material:material-icons-extended")
 
-    // ✅ Glide en Compose (Landscapist)
+
     implementation("com.github.skydoves:landscapist-glide:2.3.6")
 
     testImplementation(libs.junit)
