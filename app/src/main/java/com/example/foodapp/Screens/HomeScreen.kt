@@ -38,9 +38,7 @@ import com.example.foodapp.model.Food
 import com.example.foodapp.model.Restaurant
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
-import com.example.foodapp.ui.theme.CategoryRemote
-
-
+import com.example.foodapp.ui.theme.AppImages
 
 @Composable
 fun HomeScreen(
@@ -58,6 +56,7 @@ fun HomeScreen(
                 .fillMaxSize()
         ) {
 
+
             HeaderGreeting(userName = userName, onLogout = onLogout)
 
 
@@ -66,6 +65,9 @@ fun HomeScreen(
             Spacer(Modifier.height(8.dp))
 
 
+            SectionTitle("Busca los mejores\nrestaurantes")
+            RestaurantsRow(restaurants)
+            Spacer(Modifier.height(8.dp))
         }
     }
 }
@@ -115,6 +117,7 @@ private fun SectionTitle(text: String) {
     )
 }
 
+
 @Composable
 private fun CategoriesRow(categories: List<Category>) {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
@@ -151,14 +154,56 @@ private fun CategoryItem(category: Category) {
     }
 }
 
+
+@Composable
+private fun RestaurantsRow(restaurants: List<Restaurant>) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
+        items(restaurants) { r -> RestaurantItem(r) }
+    }
+}
+
+@Composable
+private fun RestaurantItem(restaurant: Restaurant) {
+    Column(
+        modifier = Modifier.width(120.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .clip(CircleShape)
+                .background(Color.White),
+            contentAlignment = Alignment.Center
+        ) {
+            GlideImage(
+                imageModel = { restaurant.imageUrl },
+                imageOptions = ImageOptions(contentScale = ContentScale.Fit),
+                modifier = Modifier
+                    .size(72.dp)
+                    .padding(8.dp)
+            )
+        }
+
+        Spacer(Modifier.height(6.dp))
+
+        Text(
+            text = restaurant.name,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            color = Color(0xFF3C3C3C)
+        )
+    }
+}
+
+
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun HomeScreenPreview() {
     MaterialTheme {
         HomeScreen(
             userName = "Grecia",
-            categories = CategoryRemote.categories,
-            restaurants = emptyList(),
+            categories = AppImages.categories,
+            restaurants = AppImages.restaurants,
             foods = emptyList()
         )
     }
