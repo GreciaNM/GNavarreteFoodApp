@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.Icon
@@ -39,6 +41,9 @@ import com.example.foodapp.model.Restaurant
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.example.foodapp.ui.theme.AppImages
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 
 @Composable
 fun HomeScreen(
@@ -67,6 +72,11 @@ fun HomeScreen(
 
             SectionTitle("Busca los mejores\nrestaurantes")
             RestaurantsRow(restaurants)
+            Spacer(Modifier.height(8.dp))
+
+
+            SectionTitle("Nuestras mejores comidas")
+            FoodsGrid(foods)
             Spacer(Modifier.height(8.dp))
         }
     }
@@ -117,7 +127,7 @@ private fun SectionTitle(text: String) {
     )
 }
 
-
+/* ------------------ CATEGORÍAS ------------------ */
 @Composable
 private fun CategoriesRow(categories: List<Category>) {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
@@ -154,7 +164,7 @@ private fun CategoryItem(category: Category) {
     }
 }
 
-
+/* ------------------ RESTAURANTES ------------------ */
 @Composable
 private fun RestaurantsRow(restaurants: List<Restaurant>) {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
@@ -195,6 +205,77 @@ private fun RestaurantItem(restaurant: Restaurant) {
     }
 }
 
+/* ------------------ COMIDAS ------------------ */
+@Composable
+private fun FoodsGrid(foods: List<Food>) {
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+        modifier = Modifier.height(520.dp) // ajusta si necesitas más/menos alto
+    ) {
+        items(foods) { f ->
+            FoodItem(food = f)
+        }
+    }
+}
+
+@Composable
+private fun FoodItem(food: Food) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier.size(160.dp),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+
+            GlideImage(
+                imageModel = { food.imageUrl },
+                imageOptions = ImageOptions(contentScale = ContentScale.Fit),
+                modifier = Modifier.size(140.dp)
+            )
+
+
+            Box(
+                modifier = Modifier
+                    .padding(end = 6.dp, bottom = 6.dp)
+                    .background(
+                        color = Color(0xFFE53935),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "$${food.price}",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+
+        Spacer(Modifier.height(6.dp))
+
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = Icons.Filled.Star,
+                contentDescription = "Rating",
+                tint = Color(0xFF27AE60), // verde
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(Modifier.width(6.dp))
+            Text(
+                text = "${food.rating} ${food.name}",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF3C3C3C)
+            )
+        }
+    }
+}
+
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
@@ -204,7 +285,7 @@ fun HomeScreenPreview() {
             userName = "Grecia",
             categories = AppImages.categories,
             restaurants = AppImages.restaurants,
-            foods = emptyList()
+            foods = AppImages.foods
         )
     }
 }
